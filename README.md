@@ -33,6 +33,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1DPyUhWsrR8dZDkIT4AfUbB
 
 This project is configured to automatically deploy to GitHub Pages using GitHub Actions.
 
+
 ### Setup for Deployment
 
 1. **Push to GitHub:**
