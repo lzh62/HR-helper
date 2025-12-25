@@ -3,20 +3,21 @@ import React, { useState, useMemo } from 'react';
 
 interface NameInputProps {
   onNamesSubmit: (names: string[]) => void;
+  initialNames?: string[];
 }
 
 const SAMPLE_NAMES = [
-  "1, 王伟", "2, 李芳", "3, 张敏", "4, 李军", "5, 王丽", 
+  "1, 王伟", "2, 李芳", "3, 张敏", "4, 李军", "5, 王丽",
   "6, 张强", "7, 刘洋", "8, 陈静", "9, 杨建", "10, 赵霞",
-  "11, 黄刚", "12, 周磊", "13, 吴芳", "14, 徐勇", "15, 孙丽", 
+  "11, 黄刚", "12, 周磊", "13, 吴芳", "14, 徐勇", "15, 孙丽",
   "16, 马静", "17, 朱强", "18, 胡敏", "19, 郭伟", "20, 何丽",
-  "21, 王伟", "22, 张敏", "23, 刘洋" 
+  "21, 王伟", "22, 张敏", "23, 刘洋"
 ];
 
 const COMMON_HEADERS = ['姓名', '名字', 'name', '序号', 'id', 'no', 'no.', '编号'];
 
-export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
-  const [inputText, setInputText] = useState('');
+export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit, initialNames = [] }) => {
+  const [inputText, setInputText] = useState(initialNames.length > 0 ? initialNames.join('\n') : '');
 
   const currentNames = useMemo(() => {
     return inputText
@@ -24,7 +25,7 @@ export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
       .map(line => {
         // 将每一行按逗号、分号、制表符或空格分割
         const parts = line.split(/[,;\t\s]+/).map(p => p.trim()).filter(p => p.length > 0);
-        
+
         // 查找第一个不是纯数字的片段（排除序号和ID）
         const namePart = parts.find(p => !/^\d+$/.test(p));
         return namePart;
@@ -90,14 +91,14 @@ export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
           <i className="fa-solid fa-users-medical mr-2 text-indigo-600"></i>
           导入名单
         </h2>
-        <button 
+        <button
           onClick={useSampleData}
           className="text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors"
         >
           <i className="fa-solid fa-lightbulb mr-1"></i> 使用示例数据 (模拟复杂格式)
         </button>
       </div>
-      
+
       <div className="space-y-4">
         <div className="bg-blue-50 border border-blue-100 p-3 rounded-xl mb-2">
           <p className="text-xs text-blue-700 leading-relaxed">
@@ -108,8 +109,8 @@ export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
 
         <div>
           <label className="block text-sm font-medium text-slate-600 mb-1">上传 CSV 或 TXT 文件</label>
-          <input 
-            type="file" 
+          <input
+            type="file"
             accept=".csv,.txt"
             onChange={handleFileUpload}
             className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors cursor-pointer"
@@ -127,6 +128,35 @@ export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
             className="w-full h-48 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none font-mono text-sm"
             placeholder="例如：&#10;1, 张三&#10;2, 李四&#10;或者直接从Excel复制两列内容粘贴"
           />
+
+          {currentNames.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-sm font-semibold text-slate-600 mb-2">解析预览 ({currentNames.length})</h3>
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 max-h-60 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                {currentNames.map((name, idx) => {
+                  const isDuplicate = duplicateNames.includes(name);
+                  return (
+                    <div
+                      key={`${name}-${idx}`}
+                      className={`
+                        py-1.5 px-3 rounded-lg text-sm font-medium flex items-center justify-between group
+                        ${isDuplicate
+                          ? 'bg-red-50 text-red-600 border border-red-200'
+                          : 'bg-white text-slate-700 border border-slate-200'}
+                      `}
+                    >
+                      <span className="truncate mr-1" title={name}>{name}</span>
+                      {isDuplicate && (
+                        <span className="text-[10px] bg-red-100 text-red-600 px-1.5 rounded font-bold whitespace-nowrap">
+                          重复
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {duplicateNames.length > 0 && (
@@ -137,7 +167,7 @@ export const NameInput: React.FC<NameInputProps> = ({ onNamesSubmit }) => {
                 发现重复姓名：<span className="font-bold">{duplicateNames.slice(0, 3).join(', ')}{duplicateNames.length > 3 ? '...' : ''}</span>
               </div>
             </div>
-            <button 
+            <button
               onClick={removeDuplicates}
               className="bg-white text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200 hover:bg-red-50 transition-colors"
             >

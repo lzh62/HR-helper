@@ -17,7 +17,7 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
     setIsProcessing(true);
     const shuffled = [...names].sort(() => Math.random() - 0.5);
     const numGroups = Math.ceil(shuffled.length / groupSize);
-    
+
     const teamNames = await generateTeamNames(numGroups, theme);
 
     const newGroups: GroupResult[] = [];
@@ -34,7 +34,7 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
 
   const exportGroupsToCSV = () => {
     if (results.length === 0) return;
-    
+
     let csvContent = "\ufeff小组名称,小组成员\n";
     results.forEach((group) => {
       csvContent += `"${group.groupName}","${group.members.join('、')}"\n`;
@@ -62,11 +62,11 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-600">每组人数</label>
             <div className="flex items-center space-x-4">
-              <input 
-                type="range" 
-                min="2" 
-                max={Math.max(2, names.length)} 
-                value={groupSize} 
+              <input
+                type="range"
+                min="2"
+                max={Math.max(2, names.length)}
+                value={groupSize}
                 onChange={(e) => setGroupSize(parseInt(e.target.value))}
                 className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
               />
@@ -79,7 +79,7 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-600">组名主题 (AI 生成)</label>
-            <select 
+            <select
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
               className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm"
@@ -108,7 +108,7 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-slate-700">分组预览</h3>
-            <button 
+            <button
               onClick={exportGroupsToCSV}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-md transition-all flex items-center space-x-2 active:scale-95"
             >
@@ -116,13 +116,13 @@ export const GroupingTool: React.FC<GroupingToolProps> = ({ names }) => {
               <span>导出分组结果 (CSV)</span>
             </button>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {results.map((group, gIdx) => (
               <div key={gIdx} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors group">
                 <div className="bg-indigo-50 p-4 border-b border-slate-100 flex justify-between items-center group-hover:bg-indigo-600 transition-colors">
-                  <h4 className="font-bold text-indigo-700 group-hover:text-white truncate pr-2">{group.groupName}</h4>
-                  <span className="text-[10px] font-bold bg-white text-indigo-600 px-2 py-0.5 rounded-full">第 {gIdx + 1} 组</span>
+                  <h4 className="font-bold text-indigo-700 group-hover:text-white truncate pr-2">{theme} {gIdx + 1}</h4>
+                  <span className="text-[10px] font-bold bg-white text-indigo-600 px-2 py-0.5 rounded-full max-w-[60%] truncate" title={group.groupName}>{group.groupName}</span>
                 </div>
                 <div className="p-4 space-y-2">
                   {group.members.map((member, mIdx) => (

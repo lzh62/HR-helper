@@ -38,19 +38,19 @@ const App: React.FC = () => {
 
             {names.length > 0 && (
               <div className="hidden md:flex items-center space-x-1 bg-slate-100 p-1 rounded-xl">
-                <button 
+                <button
                   onClick={() => setMode('draw')}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${mode === 'draw' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
                 >
                   <i className="fa-solid fa-dice mr-2"></i>随机抽签
                 </button>
-                <button 
+                <button
                   onClick={() => setMode('grouping')}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${mode === 'grouping' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
                 >
                   <i className="fa-solid fa-people-group mr-2"></i>自动分组
                 </button>
-                <button 
+                <button
                   onClick={() => setMode('setup')}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${mode === 'setup' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
                 >
@@ -60,9 +60,9 @@ const App: React.FC = () => {
             )}
 
             <div className="flex items-center">
-               <span className="hidden sm:inline-block px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full font-bold">
-                 共 {names.length} 人
-               </span>
+              <span className="hidden sm:inline-block px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full font-bold">
+                共 {names.length} 人
+              </span>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@ const App: React.FC = () => {
               <h2 className="text-3xl font-extrabold text-slate-900 mb-2">准备开启活动</h2>
               <p className="text-slate-500">上传参与者名单，系统将协助您进行公平抽签或智能分组</p>
             </div>
-            <NameInput onNamesSubmit={handleNamesSubmit} />
+            <NameInput onNamesSubmit={handleNamesSubmit} initialNames={names} />
           </div>
         )}
 
